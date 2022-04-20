@@ -2,22 +2,33 @@ package data
 
 import (
 	"kratos-crud/internal/conf"
+
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewGreeterRepo)
+var ProviderSet = wire.NewSet(NewData, NewUserInfoRepo)
 
 // Data .
 type Data struct {
-	// TODO wrapped database client
+	db *gorm.DB
 }
 
 // NewData .
 func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
-	cleanup := func() {
-		log.NewHelper(logger).Info("closing the data resources")
+	log := log.NewHelper(logger)
+	// mysql数据库连接
+	db, err := gorm.Open(mysql.Open(conf.GetDatabase().GetSource()), &gorm.Config{})
+	if err != nil {
+		return nil, nil, err
 	}
-	return &Data{}, cleanup, nil
+	d := &Data{
+		db: db,
+	}
+	return d, func() {
+		log.Info("message", "closing the data resources")
+	}, nil
 }

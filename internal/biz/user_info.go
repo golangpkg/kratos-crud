@@ -38,10 +38,10 @@ type UserInfo struct {
 // UserInfoRepo is a Greater repo.
 type UserInfoRepo interface {
 	Save(context.Context, *UserInfo) (*UserInfo, error)
-	Delete(context.Context, int64) (*UserInfo, error)
+	Delete(context.Context, int64) error
 	Update(context.Context, *UserInfo) error
 	FindByID(context.Context, int64) (*UserInfo, error)
-	ListAll(context.Context) ([]*UserInfo, error)
+	FindAll(context.Context) ([]*UserInfo, error)
 }
 
 // UserInfoUsecase is a UserInfo usecase.
@@ -55,8 +55,32 @@ func NewUserInfoUsecase(repo UserInfoRepo, logger log.Logger) *UserInfoUsecase {
 	return &UserInfoUsecase{repo: repo, log: log.NewHelper(logger)}
 }
 
-// CreateUserInfo creates a UserInfo, and returns the new UserInfo.
-func (uc *UserInfoUsecase) CreateUserInfo(ctx context.Context, g *UserInfo) (*UserInfo, error) {
-	uc.log.WithContext(ctx).Infof("CreateUserInfo: %v", g.Hello)
-	return uc.repo.Save(ctx, g)
+// CreateUserInfo
+func (uc *UserInfoUsecase) CreateUserInfo(ctx context.Context, user *UserInfo) (*UserInfo, error) {
+	uc.log.WithContext(ctx).Infof("CreateUserInfo: %v", user.UserName)
+	return uc.repo.Save(ctx, user)
+}
+
+// DeleteUserInfo
+func (uc *UserInfoUsecase) DeleteUserInfo(ctx context.Context, id int64) error {
+	uc.log.WithContext(ctx).Infof("DeleteUserInfo: %v", id)
+	return uc.repo.Delete(ctx, id)
+}
+
+// UpdateUserInfo
+func (uc *UserInfoUsecase) UpdateUserInfo(ctx context.Context, user *UserInfo) error {
+	uc.log.WithContext(ctx).Infof("UpdateUserInfo: %v", user)
+	return uc.repo.Update(ctx, user)
+}
+
+// FindUserInfoByID
+func (uc *UserInfoUsecase) FindUserInfoByID(ctx context.Context, id int64) (*UserInfo, error) {
+	uc.log.WithContext(ctx).Infof("FindUserInfoByID: %v", id)
+	return uc.repo.FindByID(ctx, id)
+}
+
+// FindAllUserInfo
+func (uc *UserInfoUsecase) FindAllUserInfo(ctx context.Context) ([]*UserInfo, error) {
+	uc.log.WithContext(ctx).Infof("FindAllUserInfo ")
+	return uc.repo.FindAll(ctx)
 }
