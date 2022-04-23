@@ -36,7 +36,7 @@ type UserInfo struct {
 }
 
 // UserInfoRepo is a Greater repo.
-type UserInfoRepo interface {
+type UserInfoRepoIf interface {
 	Save(context.Context, *UserInfo) (*UserInfo, error)
 	Delete(context.Context, int64) error
 	Update(context.Context, *UserInfo) error
@@ -46,12 +46,12 @@ type UserInfoRepo interface {
 
 // UserInfoUsecase is a UserInfo usecase.
 type UserInfoUsecase struct {
-	repo UserInfoRepo
+	repo UserInfoRepoIf
 	log  *log.Helper
 }
 
 // NewUserInfoUsecase new a UserInfo usecase.
-func NewUserInfoUsecase(repo UserInfoRepo, logger log.Logger) *UserInfoUsecase {
+func NewUserInfoUsecase(repo UserInfoRepoIf, logger log.Logger) *UserInfoUsecase {
 	return &UserInfoUsecase{repo: repo, log: log.NewHelper(logger)}
 }
 

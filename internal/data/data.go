@@ -21,7 +21,9 @@ type Data struct {
 func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 	log := log.NewHelper(logger)
 	// mysql数据库连接
-	db, err := gorm.Open(mysql.Open(conf.GetDatabase().GetSource()), &gorm.Config{})
+	//log.Infof("data soucre : %v", conf.Data_Database)
+	dbUrl := ""
+	db, err := gorm.Open(mysql.Open(dbUrl), &gorm.Config{})
 	if err != nil {
 		return nil, nil, err
 	}
