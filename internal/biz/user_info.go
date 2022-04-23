@@ -30,9 +30,13 @@ type UserInfo struct {
 	Id       int64
 	UserName string
 	Password string
-	Age      int
+	Age      uint32
 	Phone    string
 	Address  string
+}
+
+func (UserInfo) TableName() string {
+	return "user_info"
 }
 
 // UserInfoRepo is a Greater repo.

@@ -50,6 +50,11 @@ all:
 	make config;
 	make generate;
 
+.PHONY: run
+# kratos run
+run:
+	kratos run
+
 # show help
 help:
 	@echo ''

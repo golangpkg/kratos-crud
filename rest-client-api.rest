@@ -1,0 +1,8 @@
+
+# 保存用户数据接口
+POST http://localhost:8000/userInfo/save HTTP/1.1
+content-type: application/json
+
+{
+    "name":"Hendry"
+}

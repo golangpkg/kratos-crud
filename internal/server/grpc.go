@@ -27,6 +27,6 @@ func NewGRPCServer(c *conf.Server, UserInfo *service.UserInfoService, logger log
 		opts = append(opts, grpc.Timeout(c.Grpc.Timeout.AsDuration()))
 	}
 	srv := grpc.NewServer(opts...)
-	v1.RegisterUserInfoServer(srv, UserInfo)
+	v1.RegisterUserInfoServiceServer(srv, UserInfo)
 	return srv
 }

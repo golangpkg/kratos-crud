@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package demo.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "kratos-crud/api/demo/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.demo.v1";
+option java_outer_classname = "UserInfoV1";
+
+// The UserInfo service definition.
+service UserInfoService {
+
+  rpc Save(UserInfo) returns (CommReply) {
+    option (google.api.http) = {
+      post: "/userInfo/save",
+      body: "*"
+
+    };
+  }
+
+  rpc Delete(IdRequest) returns (CommReply) {
+    option (google.api.http) = {
+      post: "/userInfo/delete",
+      body: "*"
+    };
+  }
+
+  rpc Get(IdRequest) returns (UserInfoReply) {
+    option (google.api.http) = {
+      post: "/userInfo/get",
+      body: "*"
+    };
+  }
+
+    rpc List(ListRequest) returns (ListUserInfoReply) {
+    option (google.api.http) = {
+      post: "/userInfo/list",
+      body: "*"
+    };
+  }
+
+}
+// https://developers.google.cn/protocol-buffers/docs/proto3
+// 定义一个公用类型
+message UserInfo {
+  string userName = 1;
+  string password = 2;
+  uint32 age = 3;
+  string phone = 4;
+  string address = 5;
+}
+
+message IdRequest {
+  int64 id = 1;
+}
+
+message ListRequest {
+  string name = 1;
+}
+
+// return replay 
+message CommReply {
+  int64 code = 1;
+  string message = 2;
+}
+
+message UserInfoReply {
+  int64 code = 1;
+  string message = 2;
+  UserInfo userInfo = 3;
+}
+
+message ListUserInfoReply {
+  int64 code = 1;
+  string message = 2;
+  repeated UserInfo userInfoList = 3;
+}

@@ -22,7 +22,7 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 	log := log.NewHelper(logger)
 	// mysql数据库连接
 	//log.Infof("data soucre : %v", conf.Data_Database)
-	dbUrl := ""
+	dbUrl := "demo:demo@tcp(127.0.0.1:3306)/demo" //conf.Data_Database.Source
 	db, err := gorm.Open(mysql.Open(dbUrl), &gorm.Config{})
 	if err != nil {
 		return nil, nil, err

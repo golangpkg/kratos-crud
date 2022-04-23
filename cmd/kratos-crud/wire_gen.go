@@ -26,7 +26,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	}
 	userInfoRepoIf := data.NewUserInfoRepo(dataData, logger)
 	userInfoUsecase := biz.NewUserInfoUsecase(userInfoRepoIf, logger)
-	userInfoService := service.NewUserInfoService(userInfoUsecase)
+	userInfoService := service.NewUserInfoService(userInfoUsecase, logger)
 	httpServer := server.NewHTTPServer(confServer, userInfoService, logger)
 	grpcServer := server.NewGRPCServer(confServer, userInfoService, logger)
 	app := newApp(logger, httpServer, grpcServer)
