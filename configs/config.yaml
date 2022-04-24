@@ -8,7 +8,7 @@ server:
 data:
   database:
     driver: mysql
-    source: demo:demo@tcp(127.0.0.1:3306)/demo
+    source: demo:demo@tcp(127.0.0.1:3306)/demo?parseTime=true
     max_idle_conns: 20
     max_open_conns: 100
     conn_max_lifetime : 600
