@@ -29,6 +29,9 @@ message Data {
   message Database {
     string driver = 1;
     string source = 2;
+    uint32 maxIdleConns = 3;
+    uint32 maxOpenConns = 4;
+    uint32 connMaxLifetime = 5;
   }
   message Redis {
     string network = 1;

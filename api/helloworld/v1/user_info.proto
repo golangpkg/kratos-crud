@@ -45,11 +45,12 @@ service UserInfoService {
 // https://developers.google.cn/protocol-buffers/docs/proto3
 // 定义一个公用类型
 message UserInfo {
-  string userName = 1;
-  string password = 2;
-  uint32 age = 3;
-  string phone = 4;
-  string address = 5;
+  int64 id = 1;
+  string userName = 2;
+  string password = 3;
+  uint32 age = 4;
+  string phone = 5;
+  string address = 6;
 }
 
 message IdRequest {

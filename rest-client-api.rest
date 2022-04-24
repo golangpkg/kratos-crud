@@ -1,8 +1,49 @@
 
-# 保存用户数据接口
+### 增加数据
 POST http://localhost:8000/userInfo/save HTTP/1.1
 content-type: application/json
 
 {
-    "name":"Hendry"
+    "userName":"Hendry",
+    "password":"pwd123456",
+    "age":25,
+    "phone":"13811223344",
+    "address":"北京天安门1号"
+}
+
+### 删除数据
+POST http://localhost:8000/userInfo/delete HTTP/1.1
+content-type: application/json
+
+{
+    "id":1
+}
+
+### 更新
+POST http://localhost:8000/userInfo/save HTTP/1.1
+content-type: application/json
+
+{
+    "id":2,
+    "userName":"HendryNew",
+    "password":"pwd123456New",
+    "age":35,
+    "phone":"13811223344New",
+    "address":"北京天安门1号New"
+}
+
+### 按Id查询
+POST http://localhost:8000/userInfo/get HTTP/1.1
+content-type: application/json
+
+{
+    "id":2
+}
+
+### 查询全部
+POST http://localhost:8000/userInfo/list HTTP/1.1
+content-type: application/json
+
+{
+    "id":200
 }

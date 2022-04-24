@@ -2,6 +2,7 @@ package data
 
 import (
 	"kratos-crud/internal/conf"
+	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
@@ -21,9 +22,21 @@ type Data struct {
 func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 	log := log.NewHelper(logger)
 	// mysql数据库连接
-	//log.Infof("data soucre : %v", conf.Data_Database)
-	dbUrl := "demo:demo@tcp(127.0.0.1:3306)/demo" //conf.Data_Database.Source
+	dbUrl := c.Database.Source
+	log.Infof("data soucre : %v", dbUrl)
 	db, err := gorm.Open(mysql.Open(dbUrl), &gorm.Config{})
+
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Error("connect db server failed.")
+	}
+	sqlDB.SetMaxIdleConns(int(c.Database.MaxIdleConns))
+	// SetMaxIdleConns sets the maximum number of connections in the idle connection pool.
+	sqlDB.SetMaxOpenConns(int(c.Database.MaxOpenConns))
+	// SetMaxOpenConns sets the maximum number of open connections to the database.
+	sqlDB.SetConnMaxLifetime(time.Second * time.Duration(c.Database.ConnMaxLifetime))
+	// SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
+
 	if err != nil {
 		return nil, nil, err
 	}

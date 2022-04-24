@@ -2,8 +2,8 @@ package biz
 
 import (
 	"context"
-
 	v1 "kratos-crud/api/helloworld/v1"
+	"time"
 
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
@@ -27,12 +27,14 @@ PRIMARY KEY (`id`)
 */
 // UserInfo model.
 type UserInfo struct {
-	Id       int64
-	UserName string
-	Password string
-	Age      uint32
-	Phone    string
-	Address  string
+	Id        int64
+	UserName  string
+	Password  string
+	Age       uint32
+	Phone     string
+	Address   string
+	CreatedAt time.Time `gorm:"not null"`
+	UpdatedAt time.Time `gorm:"not null"`
 }
 
 func (UserInfo) TableName() string {
@@ -41,9 +43,8 @@ func (UserInfo) TableName() string {
 
 // UserInfoRepo is a Greater repo.
 type UserInfoRepoIf interface {
-	Save(context.Context, *UserInfo) (*UserInfo, error)
+	Save(context.Context, *UserInfo) (*UserInfo, error) // save or update
 	Delete(context.Context, int64) error
-	Update(context.Context, *UserInfo) error
 	FindByID(context.Context, int64) (*UserInfo, error)
 	FindAll(context.Context) ([]*UserInfo, error)
 }
@@ -59,8 +60,8 @@ func NewUserInfoUsecase(repo UserInfoRepoIf, logger log.Logger) *UserInfoUsecase
 	return &UserInfoUsecase{repo: repo, log: log.NewHelper(logger)}
 }
 
-// CreateUserInfo
-func (uc *UserInfoUsecase) CreateUserInfo(ctx context.Context, user *UserInfo) (*UserInfo, error) {
+// SaveUserInfo
+func (uc *UserInfoUsecase) SaveUserInfo(ctx context.Context, user *UserInfo) (*UserInfo, error) {
 	uc.log.WithContext(ctx).Infof("CreateUserInfo: %v", user.UserName)
 	return uc.repo.Save(ctx, user)
 }
@@ -69,12 +70,6 @@ func (uc *UserInfoUsecase) CreateUserInfo(ctx context.Context, user *UserInfo) (
 func (uc *UserInfoUsecase) DeleteUserInfo(ctx context.Context, id int64) error {
 	uc.log.WithContext(ctx).Infof("DeleteUserInfo: %v", id)
 	return uc.repo.Delete(ctx, id)
-}
-
-// UpdateUserInfo
-func (uc *UserInfoUsecase) UpdateUserInfo(ctx context.Context, user *UserInfo) error {
-	uc.log.WithContext(ctx).Infof("UpdateUserInfo: %v", user)
-	return uc.repo.Update(ctx, user)
 }
 
 // FindUserInfoByID

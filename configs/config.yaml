@@ -8,7 +8,10 @@ server:
 data:
   database:
     driver: mysql
-    source: root:root@tcp(127.0.0.1:3306)/test
+    source: demo:demo@tcp(127.0.0.1:3306)/demo
+    max_idle_conns: 20
+    max_open_conns: 100
+    conn_max_lifetime : 600
   redis:
     addr: 127.0.0.1:6379
     read_timeout: 0.2s

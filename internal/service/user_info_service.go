@@ -28,13 +28,14 @@ func NewUserInfoService(uc *biz.UserInfoUsecase, logger log.Logger) *UserInfoSer
 func (s *UserInfoService) Save(ctx context.Context, in *v1.UserInfo) (*v1.CommReply, error) {
 	s.log.Info(in.GetUserName())
 	userInfo := biz.UserInfo{}
+	userInfo.Id = in.GetId()
 	userInfo.UserName = in.GetUserName()
 	userInfo.Password = in.GetPassword()
 	userInfo.Age = in.GetAge()
 	userInfo.Phone = in.GetPhone()
 	userInfo.Address = in.GetAddress()
 
-	g, err := s.uc.CreateUserInfo(ctx, &userInfo)
+	g, err := s.uc.SaveUserInfo(ctx, &userInfo)
 	if err != nil {
 		return nil, err
 	}
@@ -52,19 +53,41 @@ func (s *UserInfoService) Delete(ctx context.Context, in *v1.IdRequest) (*v1.Com
 
 // Get
 func (s *UserInfoService) Get(ctx context.Context, in *v1.IdRequest) (*v1.UserInfoReply, error) {
-	user, err := s.uc.FindUserInfoByID(ctx, in.GetId())
+	userInfo, err := s.uc.FindUserInfoByID(ctx, in.GetId())
 	if err != nil {
 		return nil, err
 	}
-	return &v1.UserInfoReply{Message: "Get " + user.UserName}, nil
+	// 对象转换
+	userInfoReply := &v1.UserInfo{
+		Id:       userInfo.Id,
+		UserName: userInfo.UserName,
+		Password: userInfo.Password,
+		Age:      userInfo.Age,
+		Phone:    userInfo.Phone,
+		Address:  userInfo.Address,
+	}
+	return &v1.UserInfoReply{Message: "Get " + userInfo.UserName, UserInfo: userInfoReply}, nil
 }
 
 // List
 func (s *UserInfoService) List(ctx context.Context, in *v1.ListRequest) (*v1.ListUserInfoReply, error) {
-	userList, err := s.uc.FindAllUserInfo(ctx)
+	userInfoList, err := s.uc.FindAllUserInfo(ctx)
 	if err != nil {
 		return nil, err
 	}
-	log.Info(userList)
-	return &v1.ListUserInfoReply{Message: "List UserInfo"}, nil
+	// log.Info(userList)
+	var userInfoReplyList []*v1.UserInfo
+	// 循环转换对象。
+	for _, userInfo := range userInfoList {
+		userInfoReplyList = append(userInfoReplyList,
+			&v1.UserInfo{
+				Id:       userInfo.Id,
+				UserName: userInfo.UserName,
+				Password: userInfo.Password,
+				Age:      userInfo.Age,
+				Phone:    userInfo.Phone,
+				Address:  userInfo.Address,
+			})
+	}
+	return &v1.ListUserInfoReply{Message: "List UserInfo", UserInfoList: userInfoReplyList}, nil
 }
