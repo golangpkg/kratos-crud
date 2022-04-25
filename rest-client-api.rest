@@ -33,12 +33,8 @@ content-type: application/json
 }
 
 ### 按Id查询
-POST http://localhost:8000/userInfo/get HTTP/1.1
+GET http://localhost:8000/userInfo/get/2 HTTP/1.1
 content-type: application/json
-
-{
-    "id":2
-}
 
 ### 查询全部
 POST http://localhost:8000/userInfo/list HTTP/1.1
