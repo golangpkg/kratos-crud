@@ -29,8 +29,7 @@ service UserInfoService {
 
   rpc Get(IdRequest) returns (UserInfoReply) {
     option (google.api.http) = {
-      post: "/userInfo/get",
-      body: "*"
+      get: "/userInfo/get/{id}"
     };
   }
 

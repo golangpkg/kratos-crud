@@ -28,7 +28,7 @@ func RegisterUserInfoServiceHTTPServer(s *http.Server, srv UserInfoServiceHTTPSe
 	r := s.Route("/")
 	r.POST("/userInfo/save", _UserInfoService_Save0_HTTP_Handler(srv))
 	r.POST("/userInfo/delete", _UserInfoService_Delete0_HTTP_Handler(srv))
-	r.POST("/userInfo/get", _UserInfoService_Get0_HTTP_Handler(srv))
+	r.GET("/userInfo/get/{id}", _UserInfoService_Get0_HTTP_Handler(srv))
 	r.POST("/userInfo/list", _UserInfoService_List0_HTTP_Handler(srv))
 }
 
@@ -73,7 +73,10 @@ func _UserInfoService_Delete0_HTTP_Handler(srv UserInfoServiceHTTPServer) func(c
 func _UserInfoService_Get0_HTTP_Handler(srv UserInfoServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in IdRequest
-		if err := ctx.Bind(&in); err != nil {
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, "/demo.v1.UserInfoService/Get")
@@ -138,11 +141,11 @@ func (c *UserInfoServiceHTTPClientImpl) Delete(ctx context.Context, in *IdReques
 
 func (c *UserInfoServiceHTTPClientImpl) Get(ctx context.Context, in *IdRequest, opts ...http.CallOption) (*UserInfoReply, error) {
 	var out UserInfoReply
-	pattern := "/userInfo/get"
-	path := binding.EncodeURL(pattern, in, false)
+	pattern := "/userInfo/get/{id}"
+	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/demo.v1.UserInfoService/Get"))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
